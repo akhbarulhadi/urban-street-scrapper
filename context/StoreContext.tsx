@@ -1,6 +1,8 @@
 'use client';
 
 import React, { createContext, useContext, useReducer, useEffect, useCallback, ReactNode } from 'react';
+import { loadGameStateFromStorage, saveGameStateToStorage } from '@/lib/gameClient';
+
 
 // Types
 
@@ -205,35 +207,39 @@ const StoreContext = createContext<StoreContextValue | null>(null);
 export const StoreProvider = ({ children }: { children: ReactNode }) => {
   const [state, dispatch] = useReducer(storeReducer, undefined, getInitialState);
 
-  // 1. Hydrate dari localStorage setelah render pertama (Client-only)
+  // Hydrate dari localStorage setelah render pertama (Client-only)
   useEffect(() => {
-    try {
-      const saved = localStorage.getItem('urbanStreetScrapper');
-      if (saved) {
-        const parsed = JSON.parse(saved);
+    const hydrateState = async () => {
+      try {
+        const savedState = await loadGameStateFromStorage();
         dispatch({
           type: 'HYDRATE',
           payload: {
-            ...parsed,
+            ...savedState,
             gameState: GAME_STATE.MENU,
-            currentHealth: parsed.playerStats?.maxHealth ?? 3,
+            currentHealth: savedState.playerStats?.maxHealth ?? 3,
           },
         });
-      } else {
+      } catch (_) {
         dispatch({ type: 'HYDRATE', payload: {} });
       }
-    } catch (_) {
-      dispatch({ type: 'HYDRATE', payload: {} });
-    }
+    };
+
+    hydrateState();
   }, []);
 
-  // 2. Simpan ke localStorage setiap ada perubahan, TAPI hanya jika sudah di-hydrate
+  // Simpan ke localStorage setiap ada perubahan, TAPI hanya jika sudah di-hydrate
   useEffect(() => {
     if (!state._hydrated) return;
-    try {
-      const { _hydrated, gameState, currentHealth, ...toPersist } = state;
-      localStorage.setItem('urbanStreetScrapper', JSON.stringify(toPersist));
-    } catch (_) { /* quota exceeded or SSR */ }
+
+    const saveState = async () => {
+      try {
+        const { _hydrated, gameState, currentHealth, ...toPersist } = state;
+        await saveGameStateToStorage(toPersist);
+      } catch (_) { /* handle error if needed */ }
+    };
+
+    saveState();
   }, [state]);
 
   // Action creators (stable refs via useCallback)
