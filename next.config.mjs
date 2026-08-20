@@ -1,6 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  /* config options here */
+  // Next.js 16 uses Turbopack by default.
+  // Phaser is a browser-only library — dynamic import with { ssr: false }
+  // in page.js already prevents server-side execution.
+  // No webpack/turbopack config needed for Phaser to work.
+  turbopack: {},
 };
 
 export default nextConfig;

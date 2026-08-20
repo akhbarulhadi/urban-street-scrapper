@@ -1,0 +1,183 @@
+app/layout.tsx(4,31): error TS2307: Cannot find module '@/context/StoreContext' or its corresponding type declarations.
+app/page.tsx(3,38): error TS2307: Cannot find module '@/context/StoreContext' or its corresponding type declarations.
+app/page.tsx(6,22): error TS2307: Cannot find module '@/components/MainMenu' or its corresponding type declarations.
+app/page.tsx(7,18): error TS2307: Cannot find module '@/components/Shop' or its corresponding type declarations.
+app/page.tsx(8,22): error TS2307: Cannot find module '@/components/GameOver' or its corresponding type declarations.
+app/page.tsx(9,21): error TS2307: Cannot find module '@/components/Victory' or its corresponding type declarations.
+app/page.tsx(15,41): error TS2307: Cannot find module '@/components/GameCanvas' or its corresponding type declarations.
+components/GameCanvas.tsx(4,38): error TS2307: Cannot find module '@/context/StoreContext' or its corresponding type declarations.
+components/GameCanvas.tsx(5,17): error TS2307: Cannot find module '@/components/HUD' or its corresponding type declarations.
+components/GameCanvas.tsx(95,51): error TS2307: Cannot find module '@/lib/phaser/config' or its corresponding type declarations.
+components/GameCanvas.tsx(96,47): error TS2307: Cannot find module '@/lib/phaser/scenes/BootScene' or its corresponding type declarations.
+components/GameCanvas.tsx(97,47): error TS2307: Cannot find module '@/lib/phaser/scenes/PreloadScene' or its corresponding type declarations.
+components/GameCanvas.tsx(98,47): error TS2307: Cannot find module '@/lib/phaser/scenes/MainScene' or its corresponding type declarations.
+components/GameOver.tsx(3,38): error TS2307: Cannot find module '@/context/StoreContext' or its corresponding type declarations.
+components/HUD.tsx(3,38): error TS2307: Cannot find module '@/context/StoreContext' or its corresponding type declarations.
+components/MainMenu.tsx(3,38): error TS2307: Cannot find module '@/context/StoreContext' or its corresponding type declarations.
+components/Shop.tsx(3,50): error TS2307: Cannot find module '@/context/StoreContext' or its corresponding type declarations.
+components/Victory.tsx(3,38): error TS2307: Cannot find module '@/context/StoreContext' or its corresponding type declarations.
+lib/phaser/CombatSystem.ts(29,10): error TS2339: Property 'scene' does not exist on type 'CombatSystem'.
+lib/phaser/CombatSystem.ts(30,10): error TS2339: Property 'player' does not exist on type 'CombatSystem'.
+lib/phaser/CombatSystem.ts(31,10): error TS2339: Property 'enemies' does not exist on type 'CombatSystem'.
+lib/phaser/CombatSystem.ts(32,10): error TS2339: Property 'graft' does not exist on type 'CombatSystem'.
+lib/phaser/CombatSystem.ts(33,10): error TS2339: Property 'ground' does not exist on type 'CombatSystem'.
+lib/phaser/CombatSystem.ts(34,10): error TS2339: Property 'platforms' does not exist on type 'CombatSystem'.
+lib/phaser/CombatSystem.ts(35,10): error TS2339: Property 'walls' does not exist on type 'CombatSystem'.
+lib/phaser/CombatSystem.ts(36,10): error TS2339: Property 'onPlayerHurt' does not exist on type 'CombatSystem'.
+lib/phaser/CombatSystem.ts(38,10): error TS2339: Property '_attackCooldown' does not exist on type 'CombatSystem'.
+lib/phaser/CombatSystem.ts(39,10): error TS2339: Property '_attackActive' does not exist on type 'CombatSystem'.
+lib/phaser/CombatSystem.ts(40,10): error TS2339: Property '_attackHitbox' does not exist on type 'CombatSystem'.
+lib/phaser/CombatSystem.ts(41,10): error TS2339: Property '_attackTimer' does not exist on type 'CombatSystem'.
+lib/phaser/CombatSystem.ts(44,10): error TS2339: Property '_floatPool' does not exist on type 'CombatSystem'.
+lib/phaser/CombatSystem.ts(49,10): error TS2339: Property '_attackCooldown' does not exist on type 'CombatSystem'.
+lib/phaser/CombatSystem.ts(49,45): error TS2339: Property '_attackCooldown' does not exist on type 'CombatSystem'.
+lib/phaser/CombatSystem.ts(52,14): error TS2339: Property '_attackActive' does not exist on type 'CombatSystem'.
+lib/phaser/CombatSystem.ts(53,12): error TS2339: Property '_attackTimer' does not exist on type 'CombatSystem'.
+lib/phaser/CombatSystem.ts(54,16): error TS2339: Property '_attackTimer' does not exist on type 'CombatSystem'.
+lib/phaser/CombatSystem.ts(64,10): error TS2339: Property 'graft' does not exist on type 'CombatSystem'.
+lib/phaser/CombatSystem.ts(69,14): error TS2339: Property '_attackCooldown' does not exist on type 'CombatSystem'.
+lib/phaser/CombatSystem.ts(70,10): error TS2339: Property '_attackCooldown' does not exist on type 'CombatSystem'.
+lib/phaser/CombatSystem.ts(71,10): error TS2339: Property '_attackActive' does not exist on type 'CombatSystem'.
+lib/phaser/CombatSystem.ts(72,10): error TS2339: Property '_attackTimer' does not exist on type 'CombatSystem'.
+lib/phaser/CombatSystem.ts(74,28): error TS2339: Property 'player' does not exist on type 'CombatSystem'.
+lib/phaser/CombatSystem.ts(75,29): error TS2339: Property 'player' does not exist on type 'CombatSystem'.
+lib/phaser/CombatSystem.ts(79,21): error TS2339: Property 'scene' does not exist on type 'CombatSystem'.
+lib/phaser/CombatSystem.ts(80,10): error TS2339: Property 'scene' does not exist on type 'CombatSystem'.
+lib/phaser/CombatSystem.ts(90,10): error TS2339: Property 'scene' does not exist on type 'CombatSystem'.
+lib/phaser/CombatSystem.ts(94,10): error TS2339: Property 'enemies' does not exist on type 'CombatSystem'.
+lib/phaser/CombatSystem.ts(111,12): error TS2339: Property 'scene' does not exist on type 'CombatSystem'.
+lib/phaser/CombatSystem.ts(117,27): error TS2339: Property 'player' does not exist on type 'CombatSystem'.
+lib/phaser/CombatSystem.ts(118,22): error TS2339: Property 'player' does not exist on type 'CombatSystem'.
+lib/phaser/CombatSystem.ts(119,10): error TS2339: Property 'graft' does not exist on type 'CombatSystem'.
+lib/phaser/CombatSystem.ts(124,29): error TS2339: Property 'graft' does not exist on type 'CombatSystem'.
+lib/phaser/CombatSystem.ts(125,37): error TS2339: Property 'enemies' does not exist on type 'CombatSystem'.
+lib/phaser/CombatSystem.ts(129,12): error TS2339: Property 'enemies' does not exist on type 'CombatSystem'.
+lib/phaser/CombatSystem.ts(137,16): error TS2339: Property 'graft' does not exist on type 'CombatSystem'.
+lib/phaser/CombatSystem.ts(146,29): error TS2339: Property 'graft' does not exist on type 'CombatSystem'.
+lib/phaser/CombatSystem.ts(153,28): error TS2339: Property 'ground' does not exist on type 'CombatSystem'.
+lib/phaser/CombatSystem.ts(153,41): error TS2339: Property 'platforms' does not exist on type 'CombatSystem'.
+lib/phaser/CombatSystem.ts(153,57): error TS2339: Property 'walls' does not exist on type 'CombatSystem'.
+lib/phaser/CombatSystem.ts(155,26): error TS2339: Property 'scene' does not exist on type 'CombatSystem'.
+lib/phaser/CombatSystem.ts(157,16): error TS2339: Property 'graft' does not exist on type 'CombatSystem'.
+lib/phaser/CombatSystem.ts(169,14): error TS2339: Property 'player' does not exist on type 'CombatSystem'.
+lib/phaser/CombatSystem.ts(169,44): error TS2339: Property 'player' does not exist on type 'CombatSystem'.
+lib/phaser/CombatSystem.ts(171,10): error TS2339: Property 'enemies' does not exist on type 'CombatSystem'.
+lib/phaser/CombatSystem.ts(174,26): error TS2339: Property 'player' does not exist on type 'CombatSystem'.
+lib/phaser/CombatSystem.ts(198,27): error TS2339: Property 'player' does not exist on type 'CombatSystem'.
+lib/phaser/CombatSystem.ts(198,67): error TS2339: Property 'player' does not exist on type 'CombatSystem'.
+lib/phaser/CombatSystem.ts(200,16): error TS2339: Property 'onPlayerHurt' does not exist on type 'CombatSystem'.
+lib/phaser/CombatSystem.ts(202,16): error TS2339: Property 'scene' does not exist on type 'CombatSystem'.
+lib/phaser/CombatSystem.ts(213,14): error TS2339: Property 'player' does not exist on type 'CombatSystem'.
+lib/phaser/CombatSystem.ts(213,29): error TS2339: Property 'player' does not exist on type 'CombatSystem'.
+lib/phaser/CombatSystem.ts(225,10): error TS2339: Property 'scene' does not exist on type 'CombatSystem'.
+lib/phaser/CombatSystem.ts(238,25): error TS2339: Property 'scene' does not exist on type 'CombatSystem'.
+lib/phaser/CombatSystem.ts(247,10): error TS2339: Property 'scene' does not exist on type 'CombatSystem'.
+lib/phaser/CombatSystem.ts(256,10): error TS2339: Property 'scene' does not exist on type 'CombatSystem'.
+lib/phaser/CombatSystem.ts(265,23): error TS2339: Property 'scene' does not exist on type 'CombatSystem'.
+lib/phaser/CombatSystem.ts(270,29): error TS2339: Property 'scene' does not exist on type 'CombatSystem'.
+lib/phaser/CombatSystem.ts(276,10): error TS2339: Property 'scene' does not exist on type 'CombatSystem'.
+lib/phaser/CombatSystem.ts(279,10): error TS2339: Property 'scene' does not exist on type 'CombatSystem'.
+lib/phaser/CombatSystem.ts(287,22): error TS2339: Property 'scene' does not exist on type 'CombatSystem'.
+lib/phaser/CombatSystem.ts(295,10): error TS2339: Property 'scene' does not exist on type 'CombatSystem'.
+lib/phaser/CombatSystem.ts(306,10): error TS2339: Property '_attackActive' does not exist on type 'CombatSystem'.
+lib/phaser/CombatSystem.ts(307,10): error TS2339: Property '_attackHitbox' does not exist on type 'CombatSystem'.
+lib/phaser/CombatSystem.ts(308,10): error TS2339: Property '_attackHitbox' does not exist on type 'CombatSystem'.
+lib/phaser/Enemy.ts(27,10): error TS2339: Property 'scene' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(28,10): error TS2339: Property 'patrolLeft' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(29,10): error TS2339: Property 'patrolRight' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(30,10): error TS2339: Property 'state' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(31,10): error TS2339: Property 'dir' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(32,10): error TS2339: Property '_stunTimer' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(33,10): error TS2339: Property '_dyingTimer' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(34,10): error TS2339: Property 'credValue' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(37,10): error TS2339: Property 'sprite' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(38,10): error TS2339: Property 'sprite' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(39,10): error TS2339: Property 'sprite' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(40,10): error TS2339: Property 'sprite' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(41,10): error TS2339: Property 'sprite' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(44,10): error TS2339: Property '_stunStars' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(53,10): error TS2339: Property '_stunStars' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(57,10): error TS2339: Property 'sprite' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(61,33): error TS2339: Property 'sprite' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(62,33): error TS2339: Property 'sprite' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(63,33): error TS2339: Property 'state' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(64,33): error TS2339: Property 'state' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(68,28): error TS2339: Property 'scene' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(89,14): error TS2339: Property 'state' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(89,45): error TS2339: Property 'state' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(90,10): error TS2339: Property 'state' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(91,10): error TS2339: Property '_stunTimer' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(92,14): error TS2339: Property 'sprite' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(93,12): error TS2339: Property 'sprite' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(94,12): error TS2339: Property 'sprite' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(95,12): error TS2339: Property 'sprite' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(97,10): error TS2339: Property '_stunStars' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(101,14): error TS2339: Property 'state' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(101,45): error TS2339: Property 'state' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(107,10): error TS2339: Property 'state' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(108,10): error TS2339: Property '_dyingTimer' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(109,10): error TS2339: Property '_stunStars' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(111,15): error TS2339: Property 'sprite' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(113,28): error TS2339: Property 'sprite' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(114,10): error TS2339: Property 'sprite' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(115,10): error TS2339: Property 'sprite' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(116,10): error TS2339: Property 'sprite' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(118,10): error TS2339: Property 'scene' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(119,21): error TS2339: Property 'sprite' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(127,26): error TS2339: Property 'scene' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(127,51): error TS2339: Property 'sprite' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(127,66): error TS2339: Property 'sprite' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(136,10): error TS2339: Property 'scene' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(141,14): error TS2339: Property 'state' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(141,45): error TS2339: Property 'sprite' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(144,14): error TS2339: Property 'state' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(145,12): error TS2339: Property '_dyingTimer' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(146,16): error TS2339: Property '_dyingTimer' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(147,14): error TS2339: Property 'state' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(149,18): error TS2339: Property 'sprite' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(149,39): error TS2339: Property 'sprite' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(155,14): error TS2339: Property 'state' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(156,12): error TS2339: Property '_stunTimer' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(157,16): error TS2339: Property 'sprite' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(158,14): error TS2339: Property 'sprite' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(159,14): error TS2339: Property '_stunStars' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(159,43): error TS2339: Property 'sprite' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(159,58): error TS2339: Property 'sprite' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(161,16): error TS2339: Property '_stunTimer' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(162,14): error TS2339: Property 'state' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(163,18): error TS2339: Property 'sprite' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(164,16): error TS2339: Property 'sprite' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(165,16): error TS2339: Property 'sprite' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(167,14): error TS2339: Property '_stunStars' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(174,12): error TS2339: Property 'sprite' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(174,27): error TS2339: Property 'sprite' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(178,16): error TS2339: Property 'state' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(179,14): error TS2339: Property 'state' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(180,14): error TS2339: Property 'sprite' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(182,21): error TS2339: Property 'state' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(183,12): error TS2339: Property 'state' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(184,12): error TS2339: Property 'sprite' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(187,24): error TS2339: Property 'state' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(189,14): error TS2339: Property 'state' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(190,12): error TS2339: Property 'dir' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(190,33): error TS2339: Property 'sprite' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(192,16): error TS2339: Property 'sprite' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(192,33): error TS2339: Property 'patrolLeft' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(192,72): error TS2339: Property 'dir' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(193,16): error TS2339: Property 'sprite' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(193,33): error TS2339: Property 'patrolRight' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(193,72): error TS2339: Property 'dir' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(196,10): error TS2339: Property 'sprite' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(196,35): error TS2339: Property 'dir' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(197,10): error TS2339: Property 'sprite' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(197,31): error TS2339: Property 'dir' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(202,16): error TS2339: Property '_stunStars' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(203,10): error TS2339: Property '_stunStars' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(209,16): error TS2339: Property 'sprite' does not exist on type 'Enemy'.
+lib/phaser/Enemy.ts(209,37): error TS2339: Property 'sprite' does not exist on type 'Enemy'.
+lib/phaser/EnemySpawner.ts(9,19): error TS2307: Cannot find module '@/lib/phaser/Enemy' or its corresponding type declarations.
+lib/phaser/scenes/MainScene.ts(2,28): error TS2307: Cannot find module '@/lib/phaser/Player' or its corresponding type declarations.
+lib/phaser/scenes/MainScene.ts(3,28): error TS2307: Cannot find module '@/lib/phaser/LevelBuilder' or its corresponding type declarations.
+lib/phaser/scenes/MainScene.ts(4,28): error TS2307: Cannot find module '@/lib/phaser/EnemySpawner' or its corresponding type declarations.
+lib/phaser/scenes/MainScene.ts(5,28): error TS2307: Cannot find module '@/lib/phaser/GraffitiSystem' or its corresponding type declarations.
+lib/phaser/scenes/MainScene.ts(6,28): error TS2307: Cannot find module '@/lib/phaser/CombatSystem' or its corresponding type declarations.
