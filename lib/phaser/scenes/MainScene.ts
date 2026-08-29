@@ -5,7 +5,6 @@ import EnemySpawner from '@/lib/phaser/EnemySpawner';
 import GraffitiSystem from '@/lib/phaser/GraffitiSystem';
 import CombatSystem from '@/lib/phaser/CombatSystem';
 
-// Zone boundaries (player X ranges)
 const ZONES = [
   { name: 'THE BLOCK', minX: 0, maxX: 880 },
   { name: 'DOWNTOWN', minX: 880, maxX: 1840 },
@@ -37,7 +36,6 @@ export default class MainScene extends Phaser.Scene {
     super({ key: 'MainScene' });
   }
 
-  // Create
   create() {
     const { width, height } = this.scale;
     const WORLD_W = 3200;
@@ -49,34 +47,28 @@ export default class MainScene extends Phaser.Scene {
     this._killStreak = 0;
     this._streakTimer = 0;
 
-    // Health
     this._health = this.bridge?.playerStats?.maxHealth ?? 3;
     this._maxHealth = this._health;
     this.bridge?.onPlayerHit?.(this._health);
 
-    // World
     this.physics.world.setBounds(0, 0, WORLD_W, height);
     this._createBackground(WORLD_W, height);
 
-    // Level
     const builder = new LevelBuilder(this, WORLD_W, height);
     this.levelGroups = builder.build();
     const { ground, platforms, walls } = this.levelGroups;
 
-    // Player
     this.player = new Player(this, 120, height - 80, this.bridge);
     this.physics.add.collider(this.player.sprite, ground);
     this.physics.add.collider(this.player.sprite, platforms);
     this.physics.add.collider(this.player.sprite, walls);
 
-    // Enemies
     this.enemies = EnemySpawner.spawn(this);
     this.enemies.forEach((enemy) => {
       this.physics.add.collider(enemy.sprite, ground);
       this.physics.add.collider(enemy.sprite, platforms);
     });
 
-    // Systems
     this.grafSystem = new GraffitiSystem(this, this.bridge);
     this.combat = new CombatSystem(
       this,
@@ -87,7 +79,6 @@ export default class MainScene extends Phaser.Scene {
       () => this._onPlayerHurt(),
     );
 
-    // Damage Vignette (full-screen overlay, alpha = 0 normally)
     this._vignette = this.add
       .rectangle(0, 0, width, height, 0xff0000, 1)
       .setOrigin(0, 0)
@@ -95,7 +86,6 @@ export default class MainScene extends Phaser.Scene {
       .setDepth(90)
       .setAlpha(0);
 
-    // Zone notification text
     this._zoneText = this.add.text(width / 2, height - 30, '', {
       fontFamily: 'monospace',
       fontSize: '11px',
@@ -104,7 +94,6 @@ export default class MainScene extends Phaser.Scene {
       strokeThickness: 2,
     }).setOrigin(0.5, 1).setScrollFactor(0).setDepth(91).setAlpha(0.7);
 
-    // Streak text
     this._streakText = this.add.text(width / 2, 70, '', {
       fontFamily: 'monospace',
       fontSize: '16px',
@@ -113,7 +102,6 @@ export default class MainScene extends Phaser.Scene {
       strokeThickness: 3,
     }).setOrigin(0.5).setScrollFactor(0).setDepth(92).setAlpha(0);
 
-    // Camera
     this.cameras.main.fadeEffect?.reset();
     this.cameras.main.resetFX();
     this.cameras.main.setAlpha(1);
@@ -122,58 +110,45 @@ export default class MainScene extends Phaser.Scene {
     this.cameras.main.setDeadzone(width * 0.15, height * 0.2);
     this.cameras.main.fadeIn(500, 0, 0, 0);
 
-    // Zone labels
     this._addZoneLabels(height);
 
-    // Listeners
     this.game.events.on('playerStatsUpdated', this._onStatsUpdated, this);
 
-    // Announce initial zone
     this._checkZone();
 
     this._hasWon = false;
   }
 
-  // Update
   update(_, delta) {
     if (!this.player || this._dying) return;
 
-    // Player movement
     this.player.update(delta, this._getWallContacts());
 
-    // Combat actions
     if (this.player.consumeAttack()) this.combat.triggerMeleeAttack();
     if (this.player.consumeGraffiti()) this.combat.triggerGraffiti();
 
-    // Update systems
     this.combat.update(delta);
     this.combat.checkGraffitiEnemyOverlaps();
     this.credPickups = this.combat.checkCredPickups(this.credPickups);
 
-    // Enemy update (remove dead)
     this.enemies.forEach((e) => e.update(delta, this.player.x, this.player.y));
     this.enemies = this.enemies.filter((e) => !e.isDead);
 
-    // Victory condition
     if (this.enemies.length === 0 && !this._hasWon && !this._dying) {
       this._hasWon = true;
       this._forceVictory();
     }
 
-    // Kill streak timer
     if (this._streakTimer > 0) {
       this._streakTimer -= delta;
       if (this._streakTimer <= 0) this._resetStreak();
     }
 
-    // Zone check
     this._checkZone();
 
-    // Fall death
     if (this.player.y > this.scale.height + 100) this._forceGameOver();
   }
 
-  // Health
   _onPlayerHurt() {
     this._health = Math.max(0, this._health - 0.5);
     this.bridge?.onPlayerHit?.(this._health);
@@ -193,11 +168,10 @@ export default class MainScene extends Phaser.Scene {
 
   _forceVictory() {
     if (this._dying) return;
-    this.cameras.main.fadeOut(1500, 255, 255, 255); // fade to white slowly
+    this.cameras.main.fadeOut(1500, 255, 255, 255);
     this.time.delayedCall(1600, () => this.bridge?.onVictory?.());
   }
 
-  // Damage vignette
   _flashVignette() {
     this._vignette.setAlpha(0.45);
     this.tweens.add({
@@ -208,14 +182,13 @@ export default class MainScene extends Phaser.Scene {
     });
   }
 
-  // Kill streak
   addKill() {
     this._killStreak++;
     this._streakTimer = 3000; // 3s window to chain kills
 
     if (this._killStreak >= 3) {
       const bonus = this._killStreak * 5;
-      this.bridge?.onEnemyKilled?.(bonus); // bonus cred
+      this.bridge?.onEnemyKilled?.(bonus);
       this._showStreakText(this._killStreak);
     }
   }
@@ -238,7 +211,6 @@ export default class MainScene extends Phaser.Scene {
     this._streakTimer = 0;
   }
 
-  // Zone detection
   _checkZone() {
     const px = this.player.x;
     const zone = ZONES.find((z) => px >= z.minX && px < z.maxX);
@@ -256,7 +228,6 @@ export default class MainScene extends Phaser.Scene {
     });
   }
 
-  // Stats update (shop)
   _onStatsUpdated(stats) {
     if (this.bridge) this.bridge.playerStats = stats;
     this.grafSystem?.syncStats(stats);
@@ -268,7 +239,6 @@ export default class MainScene extends Phaser.Scene {
     }
   }
 
-  // Wall contact sensor
   _getWallContacts() {
     let left = false, right = false;
     const px = this.player.sprite.x;
@@ -290,17 +260,14 @@ export default class MainScene extends Phaser.Scene {
     return { left, right };
   }
 
-  // Background
   _createBackground(worldW, height) {
     this.add.rectangle(0, 0, worldW, height, 0x0a0010).setOrigin(0, 0).setScrollFactor(0.05);
 
-    // Atmospheric fog layers
     for (let i = 0; i < 4; i++) {
       this.add.rectangle(0, (height / 4) * i, 800, height / 4, 0x3d0066, 0.06 - i * 0.01)
         .setOrigin(0, 0).setScrollFactor(0);
     }
 
-    // Parallax building layers
     [
       { key: 'bg_building_c', yOff: 150, sx: 0.08, alpha: 0.45, count: 42, gap: 85 },
       { key: 'bg_building_a', yOff: 120, sx: 0.18, alpha: 0.55, count: 52, gap: 68 },
@@ -312,17 +279,14 @@ export default class MainScene extends Phaser.Scene {
       }
     });
 
-    // Neon signs
     for (let i = 0; i < 16; i++) {
       this.add.image(120 + i * 220, height - 105, 'neon_sign')
         .setOrigin(0.5, 1).setScrollFactor(0.22).setAlpha(0.45);
     }
 
-    // Neon ground strip
     this.add.rectangle(0, height - 2, worldW, 2, 0xff6600, 0.4).setOrigin(0, 1);
   }
 
-  // Zone labels
   _addZoneLabels(height) {
     ZONES.forEach(({ name, minX }) => {
       this.add.text(minX + 40, height - 50, `[ ${name} ]`, {
@@ -332,7 +296,6 @@ export default class MainScene extends Phaser.Scene {
     });
   }
 
-  // Cleanup
   shutdown() {
     this.game.events.off('playerStatsUpdated', this._onStatsUpdated, this);
     try { this.player?.destroy(); } catch (_) { }

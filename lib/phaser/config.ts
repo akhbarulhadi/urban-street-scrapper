@@ -1,12 +1,5 @@
 import Phaser from 'phaser';
-/**
- * Phaser game configuration factory.
- * Scenes are passed in to keep config decoupled from scene implementations.
- *
- * @param {HTMLElement} parent  - DOM element to mount the canvas into
- * @param {object}      bridge  - Shared bridge object for React↔Phaser communication
- * @returns {Phaser.Types.Core.GameConfig}
- */
+
 export const createPhaserConfig = (parent, bridge) => ({
   type: Phaser.AUTO,
   parent,
@@ -24,9 +17,9 @@ export const createPhaserConfig = (parent, bridge) => ({
       debug: false,
     },
   },
-  // Scenes are registered dynamically by GameCanvas.js
+  // Scenes are registered dynamically by GameCanvas
   scene: [],
-  // Store bridge on game registry so scenes can access it
+  // Store bridge on registry so all scenes can access it without direct coupling
   callbacks: {
     preBoot: (game) => {
       game.registry.set('bridge', bridge);

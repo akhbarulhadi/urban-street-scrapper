@@ -1,9 +1,4 @@
 import Phaser from 'phaser';
-/**
- * Enemy — patrol AI with stun/death state machine.
- * Fixed: stun particles use correct Phaser 3.60 stop/start API.
- *        destroy() is null-safe against already-destroyed sprites.
- */
 
 const ESTATE = {
   PATROL: 'PATROL',
@@ -44,14 +39,13 @@ export default class Enemy {
     this._dyingTimer = 0;
     this.credValue = 10 + Math.floor(Math.random() * 10);
 
-    // Sprite
     this.sprite = scene.physics.add.sprite(x, y, 'enemy');
     this.sprite.setCollideWorldBounds(true);
     this.sprite.setDepth(8);
     this.sprite.body.setSize(16, 28);
     this.sprite.body.setOffset(2, 2);
 
-    // Stun star particles (Phaser 3.60 API: create + stop immediately)
+    // Phaser 3.60 particle API: create emitter then stop immediately so it starts hidden.
     this._stunStars = scene.add.particles(x, y - 22, 'particle_star', {
       speed: { min: 30, max: 70 },
       angle: { min: 0, max: 360 },
@@ -61,20 +55,17 @@ export default class Enemy {
       frequency: 110,
       tint: [0xffff00, 0xffffff, 0x00ffff],
     });
-    this._stunStars.stop(); // Start hidden
+    this._stunStars.stop();
 
-    // Animations
     this._buildAnims();
     this.sprite.play('enemy_walk_anim', true);
   }
 
-  // Public
   get x() { return this.sprite?.x ?? 0; }
   get y() { return this.sprite?.y ?? 0; }
   get isDead() { return this.state === ESTATE.DEAD; }
   get isStunned() { return this.state === ESTATE.STUN; }
 
-  // Animations
   _buildAnims() {
     const { anims } = this.scene;
     if (!anims.exists('enemy_walk_anim')) {
@@ -95,7 +86,6 @@ export default class Enemy {
     }
   }
 
-  // Hit reactions
   hitByGraffiti() {
     if (this.state === ESTATE.DYING || this.state === ESTATE.DEAD) return;
     this.state = ESTATE.STUN;
@@ -134,7 +124,6 @@ export default class Enemy {
       ease: 'Power2',
     });
 
-    // Death burst
     const emitter = this.scene.add.particles(this.sprite.x, this.sprite.y - 10, 'particle_star', {
       speed: { min: 80, max: 200 },
       angle: { min: 0, max: 360 },
@@ -147,11 +136,9 @@ export default class Enemy {
     this.scene.time.delayedCall(1000, () => emitter.destroy());
   }
 
-  // Update
   update(delta, playerX, playerY) {
     if (this.state === ESTATE.DEAD || !this.sprite?.active) return;
 
-    // DYING
     if (this.state === ESTATE.DYING) {
       this._dyingTimer -= delta;
       if (this._dyingTimer <= 0) {
@@ -162,7 +149,6 @@ export default class Enemy {
       return;
     }
 
-    // STUN
     if (this.state === ESTATE.STUN) {
       this._stunTimer -= delta;
       if (this.sprite?.active) {
@@ -180,7 +166,6 @@ export default class Enemy {
       return;
     }
 
-    // PATROL / ALERT
     const dist = Phaser.Math.Distance.Between(
       this.sprite.x, this.sprite.y, playerX, playerY
     );
@@ -208,7 +193,6 @@ export default class Enemy {
     this.sprite.setFlipX(this.dir < 0);
   }
 
-  // Cleanup
   _safeDestroyStars() {
     try { this._stunStars?.destroy(); } catch (_) { }
     this._stunStars = null;

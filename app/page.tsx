@@ -19,7 +19,6 @@ const GameCanvas = dynamic(() => import('@/components/GameCanvas'), {
   ),
 });
 
-// Root page — state router.
 export default function Home() {
   const { gameState } = useStore();
   const [playSessionId, setPlaySessionId] = useState(0);
@@ -44,17 +43,13 @@ export default function Home() {
       {/* Shop */}
       {gameState === GAME_STATE.SHOP && <Shop />}
 
-      {/*
-        Game Canvas
-        Unmounts when navigating to MENU/SHOP (Phaser fully destroyed).
-        The key prop forces a full remount when transitioning GAME_OVER -> PLAYING.
-      */}
+      {/* Game Canvas */}
       {showCanvas && <GameCanvas key={playSessionId} />}
 
-      {/* Game Over overlay (above canvas) */}
+      {/* Game Over */}
       {isGameOver && <GameOver />}
 
-      {/* Victory overlay (above canvas) */}
+      {/* Victory */}
       {isVictory && <Victory />}
 
     </main>

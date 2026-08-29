@@ -1,16 +1,9 @@
 import Phaser from 'phaser';
-/**
- * GraffitiTag — the player's graffiti spray projectile.
- *
- * Manages a pool of active tags and the player's ammo count.
- * Tags travel horizontally, expire after MAX_RANGE, and spawn
- * a splash effect on impact with anything.
- */
 
 const GCFG = {
-  SPEED: 400,    // px/s
-  MAX_RANGE: 380,    // px before auto-destroy
-  REGEN_TIME: 4000,   // ms per ammo regen tick
+  SPEED: 400,
+  MAX_RANGE: 380,
+  REGEN_TIME: 4000,
 };
 
 export default class GraffitiSystem {
@@ -21,26 +14,20 @@ export default class GraffitiSystem {
   _maxAmmo: number;
   _regenTimer: number;
 
-  /**
-   * @param {Phaser.Scene} scene
-   * @param {object}       bridge  React↔Phaser bridge
-   */
   constructor(scene, bridge) {
     this.scene = scene;
     this.bridge = bridge;
-    this._tags = [];       // active GraffitiTag objects
+    this._tags = [];
     this._ammo = bridge?.playerStats?.graffitiAmmo ?? 3;
     this._maxAmmo = this._ammo;
     this._regenTimer = 0;
 
-    // Notify React HUD of initial ammo
     this.bridge?.onAmmoChange?.(this._ammo);
   }
 
   get ammo() { return this._ammo; }
   get maxAmmo() { return this._maxAmmo; }
 
-  // Refresh max ammo from latest playerStats (called after shop purchase)
   syncStats(stats) {
     const newMax = stats?.graffitiAmmo ?? this._maxAmmo;
     if (newMax > this._maxAmmo) {
@@ -50,14 +37,6 @@ export default class GraffitiSystem {
     }
   }
 
-  // Fire
-  /**
-   * Attempt to fire one graffiti tag.
-   * @param {number} x      Origin X (player position)
-   * @param {number} y      Origin Y
-   * @param {number} dir    1 = right, -1 = left
-   * @returns {boolean}     true if fired, false if no ammo
-   */
   fire(x, y, dir) {
     if (this._ammo <= 0) {
       this._showNoAmmoFeedback(x, y);
@@ -72,10 +51,7 @@ export default class GraffitiSystem {
     return true;
   }
 
-  // Update
-  /** @param {number} delta ms */
   update(delta) {
-    // Ammo regen
     if (this._ammo < this._maxAmmo) {
       this._regenTimer += delta;
       if (this._regenTimer >= GCFG.REGEN_TIME) {
@@ -85,26 +61,21 @@ export default class GraffitiSystem {
       }
     }
 
-    // Update each tag
     this._tags = this._tags.filter((tag) => {
       tag.update(delta);
       return !tag.isDead;
     });
   }
 
-  // Getters for collision
-  // Returns all live tag sprites for overlap checks
   getSprites() {
     return this._tags.filter((t) => !t.isDead).map((t) => t.sprite);
   }
 
-  // Called by CombatSystem when a tag hits something
   onTagHit(sprite) {
     const tag = this._tags.find((t) => t.sprite === sprite);
     if (tag) tag.explode();
   }
 
-  // No-ammo feedback
   _showNoAmmoFeedback(x, y) {
     const txt = this.scene.add.text(x, y - 30, 'NO AMMO!', {
       fontFamily: 'monospace',
@@ -128,8 +99,6 @@ export default class GraffitiSystem {
   }
 }
 
-// Single Graffiti Tag
-
 class GraffitiTag {
   scene: any;
   dir: number;
@@ -150,7 +119,6 @@ class GraffitiTag {
     this.sprite.body.setVelocityX(dir * GCFG.SPEED);
     this.sprite.setFlipX(dir < 0);
 
-    // Trailing glow tween
     this._pulseTween = scene.tweens.add({
       targets: this.sprite,
       alpha: 0.7,
@@ -168,7 +136,6 @@ class GraffitiTag {
     }
   }
 
-  // Trigger impact explosion and mark as dead
   explode() {
     if (this.isDead) return;
     this.isDead = true;
@@ -176,7 +143,6 @@ class GraffitiTag {
 
     const { x, y } = this.sprite;
 
-    // Splash effect
     const emitter = this.scene.add.particles(x, y, 'graffiti_splash', {
       speed: { min: 40, max: 120 },
       angle: { min: 0, max: 360 },
@@ -188,7 +154,6 @@ class GraffitiTag {
     });
     this.scene.time.delayedCall(1000, () => emitter.destroy());
 
-    // Splash image that fades
     const splash = this.scene.add.image(x, y, 'graffiti_splash').setDepth(11).setAlpha(0.9);
     this.scene.tweens.add({
       targets: splash,

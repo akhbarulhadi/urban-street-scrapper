@@ -3,7 +3,6 @@
 import { useStore, GAME_STATE } from '@/context/StoreContext';
 import { useEffect, useState } from 'react';
 
-// Animated counting number
 function CountUp({ target, duration = 1200, prefix = '', suffix = '' }) {
   const [val, setVal] = useState(0);
 
@@ -36,19 +35,16 @@ export default function GameOver() {
       aria-modal="true"
       aria-label="Game Over"
     >
-      {/* Red scan-line overlay */}
       <div
         className="absolute inset-0 pointer-events-none opacity-30"
         style={{ background: 'repeating-linear-gradient(0deg,transparent,transparent 4px,rgba(255,0,0,0.04) 4px,rgba(255,0,0,0.04) 5px)' }}
         aria-hidden="true"
       />
 
-      {/* Neon glow orb behind title */}
       <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-32 rounded-full blur-[80px] bg-red-600/20 pointer-events-none" aria-hidden="true" />
 
       <div className="relative z-10 flex flex-col items-center gap-6 px-8 text-center animate-fade-in">
 
-        {/* GAME OVER title */}
         <div>
           <div
             className="text-6xl md:text-8xl font-black tracking-tight text-red-500 drop-shadow-[0_0_40px_rgba(255,30,30,0.7)]"
@@ -64,7 +60,6 @@ export default function GameOver() {
           </div>
         </div>
 
-        {/* New high-score badge */}
         {isNewHigh && (
           <div className="px-5 py-2 bg-yellow-500/20 border border-yellow-400/50 rounded-full animate-pulse">
             <span className="text-yellow-300 font-black text-sm tracking-widest uppercase">
@@ -73,7 +68,6 @@ export default function GameOver() {
           </div>
         )}
 
-        {/* Stats panel */}
         <div className="flex gap-5 mt-1">
           <div className="flex flex-col items-center px-6 py-4 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm">
             <span className="text-xs text-gray-500 uppercase tracking-widest mb-1">Score</span>
@@ -95,14 +89,12 @@ export default function GameOver() {
           </div>
         </div>
 
-        {/* Tip */}
         <p className="text-gray-600 text-xs italic">
           {streetCred >= 30
             ? 'Tip: You have enough cred for gear — visit the Shop!'
             : 'Tip: Use Graffiti to stun enemies before punching!'}
         </p>
 
-        {/* Action buttons */}
         <div className="flex flex-col items-center gap-3 w-full max-w-[260px] mt-2">
           <button
             id="btn-retry"

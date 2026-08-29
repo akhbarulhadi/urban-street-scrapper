@@ -3,7 +3,6 @@
 import { useStore, GAME_STATE } from '@/context/StoreContext';
 import { useEffect, useRef } from 'react';
 
-// Health Hearts
 const HealthBar = ({ current, max }) => (
   <div className="flex items-center gap-1.5" role="status" aria-label={`Health: ${current} of ${max}`}>
     {Array.from({ length: max }, (_, i) => {
@@ -16,9 +15,7 @@ const HealthBar = ({ current, max }) => (
           className="relative text-xl leading-none select-none text-gray-800"
           aria-hidden="true"
         >
-          {/* Empty Heart Background */}
           ♥
-          {/* Red Heart Foreground (Half or Full) */}
           {(isFull || isHalf) && (
             <span
               className="absolute left-0 top-0 text-red-500 drop-shadow-[0_0_6px_rgba(255,50,50,0.9)] overflow-hidden transition-all duration-300"
@@ -33,7 +30,6 @@ const HealthBar = ({ current, max }) => (
   </div>
 );
 
-// Graffiti Ammo Dots
 const AmmoBar = ({ current, max }) => (
   <div className="flex items-center gap-1" role="status" aria-label={`Graffiti ammo: ${current} of ${max}`}>
     <span className="text-xs text-purple-400 mr-0.5 select-none" aria-hidden="true">🎨</span>
@@ -50,7 +46,6 @@ const AmmoBar = ({ current, max }) => (
   </div>
 );
 
-// Score with animated increment flash
 const ScoreDisplay = ({ score }) => {
   const prevScore = useRef(score);
   const flashRef = useRef(null);
@@ -58,7 +53,7 @@ const ScoreDisplay = ({ score }) => {
   useEffect(() => {
     if (score !== prevScore.current && flashRef.current) {
       flashRef.current.classList.remove('scale-110', 'text-yellow-300');
-      // Force reflow to restart animation
+      // Force reflow to restart the CSS transition from scratch.
       void flashRef.current.offsetWidth;
       flashRef.current.classList.add('scale-110', 'text-yellow-300');
       setTimeout(() => {
@@ -82,7 +77,6 @@ const ScoreDisplay = ({ score }) => {
   );
 };
 
-// Street Cred counter with bump animation
 const CredDisplay = ({ streetCred }) => {
   const prevCred = useRef(streetCred);
   const bumpRef = useRef(null);
@@ -111,7 +105,6 @@ const CredDisplay = ({ streetCred }) => {
   );
 };
 
-// Main HUD Component
 export default function HUD({ graffitiAmmo = 3 }) {
   const { currentHealth, playerStats, score, streetCred, setGameState } = useStore();
 
@@ -121,18 +114,13 @@ export default function HUD({ graffitiAmmo = 3 }) {
       role="complementary"
       aria-label="Game HUD"
     >
-      {/* Top Bar */}
       <div className="flex items-start justify-between px-4 pt-3 pb-2 bg-gradient-to-b from-black/70 to-transparent">
 
-        {/* Left — Health + Ammo */}
         <div className="flex flex-col gap-2 pointer-events-auto">
           <HealthBar current={currentHealth} max={playerStats.maxHealth} />
           <AmmoBar current={graffitiAmmo} max={playerStats.graffitiAmmo} />
         </div>
 
-
-
-        {/* Right — Cred + Menu button */}
         <div className="flex flex-col items-end gap-1.5 pointer-events-auto">
           <CredDisplay streetCred={streetCred} />
           <button
@@ -146,11 +134,9 @@ export default function HUD({ graffitiAmmo = 3 }) {
         </div>
       </div>
 
-      {/* CENTRAL STACK (Score, Text, Gears, Controls) */}
       <div className="absolute top-4 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3">
         <ScoreDisplay score={score} />
 
-        {/* Equipped Gear Pills */}
         {(playerStats.jumpBoost || playerStats.airDash) && (
           <div className="flex gap-3" aria-label="Active upgrades">
             {playerStats.jumpBoost && (
@@ -166,11 +152,9 @@ export default function HUD({ graffitiAmmo = 3 }) {
           </div>
         )}
 
-        {/* Controls tooltip (fade out after 5s) */}
         <ControlsHint />
       </div>
 
-      {/* Watermark (Bottom Center) */}
       <div className="absolute bottom-2 left-1/2 -translate-x-1/2 select-none pointer-events-none">
         <span className="text-white font-bold text-[9px] uppercase tracking-widest drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
           Made with 💖 by Akhbarul Hadi (2026)
@@ -180,7 +164,6 @@ export default function HUD({ graffitiAmmo = 3 }) {
   );
 }
 
-// Controls Hint (auto-hides after 5s)
 function ControlsHint() {
   const ref = useRef(null);
   useEffect(() => {

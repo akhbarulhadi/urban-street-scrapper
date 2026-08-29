@@ -3,7 +3,6 @@
 import { useStore, SHOP_ITEMS, GAME_STATE } from '@/context/StoreContext';
 import { useState } from 'react';
 
-// Shop Item Card
 const ShopItemCard = ({ item, owned, canAfford, onBuy }) => {
   const [pulse, setPulse] = useState(false);
 
@@ -68,7 +67,6 @@ const ShopItemCard = ({ item, owned, canAfford, onBuy }) => {
   );
 };
 
-// Notification Toast
 const Toast = ({ message }) =>
   message ? (
     <div className="fixed top-6 left-1/2 -translate-x-1/2 z-50 px-6 py-3 bg-green-700/90 border border-green-400/60 rounded-2xl text-green-100 font-bold text-sm shadow-xl animate-bounce-in">
@@ -76,7 +74,6 @@ const Toast = ({ message }) =>
     </div>
   ) : null;
 
-// Main Shop Component
 export default function Shop() {
   const { streetCred, inventory, purchaseItem, setGameState } = useStore();
   const [toast, setToast] = useState('');
@@ -97,7 +94,6 @@ export default function Shop() {
 
   return (
     <div className="relative min-h-screen bg-black text-white overflow-hidden">
-      {/* Neon grid background */}
       <div
         className="absolute inset-0 pointer-events-none opacity-5"
         style={{
@@ -108,7 +104,6 @@ export default function Shop() {
         aria-hidden="true"
       />
 
-      {/* Floating background tags */}
       <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
         {['UPGRADE', '👟', 'MAX', '🚀', 'HP+', '🎨', 'GEAR'].map((tag, i) => (
           <span
@@ -130,7 +125,6 @@ export default function Shop() {
       <Toast message={toast} />
 
       <div className="relative z-10 max-w-2xl mx-auto px-4 py-8">
-        {/* Header */}
         <header className="flex items-center justify-between mb-8">
           <div>
             <h2 className="text-4xl font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-orange-400 drop-shadow-[0_0_15px_rgba(200,100,255,0.4)]">
@@ -148,10 +142,8 @@ export default function Shop() {
           </div>
         </header>
 
-        {/* Divider */}
         <div className="h-px bg-gradient-to-r from-transparent via-orange-500/50 to-transparent mb-8" aria-hidden="true" />
 
-        {/* Items Grid */}
         <section aria-label="Shop items" className="flex flex-col gap-4">
           {SHOP_ITEMS.map((item) => (
             <ShopItemCard
@@ -164,7 +156,6 @@ export default function Shop() {
           ))}
         </section>
 
-        {/* Footer nav */}
         <div className="flex gap-3 mt-10">
           <button
             id="btn-shop-back-menu"

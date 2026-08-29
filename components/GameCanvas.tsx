@@ -4,7 +4,6 @@ import { useEffect, useRef, useCallback, useState } from 'react';
 import { useStore, GAME_STATE } from '@/context/StoreContext';
 import HUD from '@/components/HUD';
 
-// GameCanvas — mounts a Phaser game instance inside a React component.
 export default function GameCanvas() {
   const containerRef = useRef(null);
   const gameRef = useRef(null);
@@ -12,58 +11,47 @@ export default function GameCanvas() {
   const bridgeRef = useRef(null);
   const prevStateRef = useRef(GAME_STATE.PLAYING);
 
-  // Stable ref to latest store — prevents stale closures in bridge callbacks
+  // Stable ref to latest store — prevents stale closures in bridge callbacks.
   const storeRef = useRef(null);
   const store = useStore();
   storeRef.current = store;
 
   const { playerStats, gameState, setGameState } = store;
 
-  // Ammo as React state so HUD re-renders when Phaser calls onAmmoChange
+  // Ammo as React state so HUD re-renders when Phaser calls onAmmoChange.
   const [graffitiAmmo, setGraffitiAmmo] = useState(playerStats.graffitiAmmo);
 
-  // Build bridge once (stable object, callbacks always fresh via storeRef)
+  // Build bridge once (stable object, callbacks always read latest state via storeRef).
   if (!bridgeRef.current) {
     bridgeRef.current = {
-      // Phaser → React: enemy killed, add cred + score
       onEnemyKilled: (credAmount) => {
         storeRef.current?.addStreetCred(credAmount);
         storeRef.current?.addScore(credAmount * 10);
       },
-      // Phaser → React: player health changed
       onPlayerHit: (newHealth) => {
         storeRef.current?.setHealth(newHealth);
       },
-      // Phaser → React: game over
       onGameOver: () => {
         storeRef.current?.triggerGameOver();
       },
-      // Phaser → React: victory
       onVictory: () => {
         storeRef.current?.triggerVictory();
       },
-      // Phaser → React: ammo changed — triggers HUD re-render
       onAmmoChange: (ammo) => {
         setGraffitiAmmo(ammo);
       },
-      // React → Phaser: current state (read by Phaser each frame)
       playerStats: { ...playerStats },
       gameState: gameState,
     };
   }
 
-  // Sync bridge.playerStats on every shop purchase
   useEffect(() => {
     if (!bridgeRef.current) return;
     bridgeRef.current.playerStats = { ...playerStats };
     bridgeRef.current.gameState = gameState;
-    // Notify active Phaser scene
     gameRef.current?.events.emit('playerStatsUpdated', playerStats);
   }, [playerStats, gameState]);
 
-
-
-  // ESC → Menu
   useEffect(() => {
     const onKeyDown = (e) => {
       if (e.key === 'Escape') setGameState(GAME_STATE.MENU);
@@ -72,7 +60,6 @@ export default function GameCanvas() {
     return () => window.removeEventListener('keydown', onKeyDown);
   }, [setGameState]);
 
-  // Mount Phaser
   useEffect(() => {
     let isCancelled = false;
 
@@ -108,14 +95,12 @@ export default function GameCanvas() {
 
   return (
     <div className="relative w-full h-screen bg-black overflow-hidden">
-      {/* Phaser mounts its canvas here */}
       <div
         id="phaser-game"
         ref={containerRef}
         className="w-full h-full"
         aria-label="Game canvas"
       />
-      {/* React HUD — overlaid above canvas, re-renders independently */}
       <HUD graffitiAmmo={graffitiAmmo} />
     </div>
   );

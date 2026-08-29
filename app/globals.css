@@ -1,7 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;700;900&display=swap');
 @import "tailwindcss";
 
-/* Base Reset */
 *,
 *::before,
 *::after {
@@ -17,12 +16,10 @@ body {
   color: #fff;
 }
 
-/* Prevent scrollbar flash */
 body {
   overflow-x: hidden;
 }
 
-/* Custom Keyframes */
 @keyframes float {
 
   0%,
@@ -103,7 +100,6 @@ body {
   }
 }
 
-/* Utility Classes */
 .animate-float {
   animation: float 3s ease-in-out infinite;
 }
@@ -116,7 +112,6 @@ body {
   animation: neon-pulse 2s ease-in-out infinite;
 }
 
-/* Glitch title — purely decorative layers */
 .glitch-title {
   position: relative;
   display: flex;
@@ -164,7 +159,6 @@ body {
   background: #ff6600;
 }
 
-/* Fade In (GameOver overlay) */
 @keyframes fade-in {
   from {
     opacity: 0;
@@ -181,7 +175,6 @@ body {
   animation: fade-in 0.45s ease-out both;
 }
 
-/* Glitch flicker (title) */
 @keyframes glitch-flicker {
 
   0%,
@@ -214,7 +207,6 @@ body {
   animation: glitch-flicker 6s infinite;
 }
 
-/* Subtle orange card fill */
 .bg-orange-500\/8 {
   background-color: rgba(249, 115, 22, 0.08);
 }

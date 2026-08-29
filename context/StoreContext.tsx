@@ -4,8 +4,6 @@ import React, { createContext, useContext, useReducer, useEffect, useCallback, R
 import { loadGameStateFromStorage, saveGameStateToStorage } from '@/lib/gameClient';
 
 
-// Types
-
 export enum GAME_STATE {
   MENU = 'MENU',
   PLAYING = 'PLAYING',
@@ -69,8 +67,6 @@ export interface StoreContextValue extends StoreState {
   triggerVictory: () => void;
 }
 
-// Constants
-
 export const SHOP_ITEMS: ShopItem[] = [
   {
     id: 'sneakers',
@@ -106,7 +102,6 @@ export const SHOP_ITEMS: ShopItem[] = [
   },
 ];
 
-// Initial State
 const getInitialState = (): StoreState => {
   return {
     _hydrated: false,
@@ -120,7 +115,6 @@ const getInitialState = (): StoreState => {
   };
 };
 
-// Reducer
 const storeReducer = (state: StoreState, action: Action): StoreState => {
   switch (action.type) {
     case 'HYDRATE':
@@ -190,7 +184,6 @@ const storeReducer = (state: StoreState, action: Action): StoreState => {
   }
 };
 
-// Apply a shop item's stat bonus to playerStats
 const applyItemStat = (stats: PlayerStats, item: ShopItem): PlayerStats => {
   switch (item.stat) {
     case 'jumpBoost': return { ...stats, jumpBoost: true };
@@ -201,13 +194,12 @@ const applyItemStat = (stats: PlayerStats, item: ShopItem): PlayerStats => {
   }
 };
 
-// Context
 const StoreContext = createContext<StoreContextValue | null>(null);
 
 export const StoreProvider = ({ children }: { children: ReactNode }) => {
   const [state, dispatch] = useReducer(storeReducer, undefined, getInitialState);
 
-  // Hydrate dari localStorage setelah render pertama (Client-only)
+  // Hydrate from localStorage on first client render.
   useEffect(() => {
     const hydrateState = async () => {
       try {
@@ -228,7 +220,7 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
     hydrateState();
   }, []);
 
-  // Simpan ke localStorage setiap ada perubahan, TAPI hanya jika sudah di-hydrate
+  // Persist to localStorage on state change, but only after hydration is complete.
   useEffect(() => {
     if (!state._hydrated) return;
 
@@ -242,7 +234,6 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
     saveState();
   }, [state]);
 
-  // Action creators (stable refs via useCallback)
   const setGameState = useCallback((s: GAME_STATE) => dispatch({ type: 'SET_GAME_STATE', payload: s }), []);
   const addStreetCred = useCallback((n: number) => dispatch({ type: 'ADD_STREET_CRED', payload: n }), []);
   const setStreetCred = useCallback((n: number) => dispatch({ type: 'SET_STREET_CRED', payload: n }), []);
@@ -271,7 +262,7 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>;
 };
 
-// Custom hook — throws if used outside provider
+// Throws if used outside provider — intentional guard.
 export const useStore = (): StoreContextValue => {
   const ctx = useContext(StoreContext);
   if (!ctx) throw new Error('useStore must be used inside <StoreProvider>');

@@ -1,12 +1,4 @@
 import Phaser from 'phaser';
-/**
- * Player — encapsulates all player logic:
- *  - Physics body setup
- *  - Input handling (keyboard + potential gamepad)
- *  - State machine: IDLE | RUN | JUMP | DOUBLE_JUMP | WALL_SLIDE | DASH | HURT
- *  - Animations (driven by procedural textures from PreloadScene)
- *  - Upgrade-aware: reads playerStats from bridge for enhanced abilities
- */
 
 const STATE = {
   IDLE: 'IDLE',
@@ -18,21 +10,20 @@ const STATE = {
   HURT: 'HURT',
 };
 
-// Tunable constants
 const CFG = {
   SPEED: 220,
   JUMP_VEL: -520,
-  JUMP_VEL_BOOST: -680,   // with sneakers
+  JUMP_VEL_BOOST: -680,   // with Air Grind Sneakers upgrade
   DOUBLE_JUMP_VEL: -460,
   WALL_JUMP_VX: 260,
   WALL_JUMP_VY: -480,
   DASH_VEL: 520,
-  DASH_DURATION: 180,   // ms
-  DASH_COOLDOWN: 700,   // ms
-  HURT_DURATION: 800,   // ms
-  COYOTE_TIME: 100,   // ms — grace jump after walking off edge
-  JUMP_BUFFER: 120,   // ms — pre-press buffer
-  WALL_SLIDE_VEL: 60,    // slow fall speed when wall-sliding
+  DASH_DURATION: 180,
+  DASH_COOLDOWN: 700,
+  HURT_DURATION: 800,
+  COYOTE_TIME: 100,   // grace jump window after walking off an edge
+  JUMP_BUFFER: 120,   // pre-press buffer so jump input isn't dropped
+  WALL_SLIDE_VEL: 60,
 };
 
 export default class Player {
@@ -43,7 +34,6 @@ export default class Player {
   sprite: any;
   keys: any;
 
-  // timers/state flags
   _jumpsLeft!: number;
   _lastDir!: number;
   _coyoteTimer!: number;
@@ -52,7 +42,6 @@ export default class Player {
   _dashCooldown!: number;
   _lastOnGround!: boolean;
 
-  // Input edge-detection tracking
   _jumpPressed!: boolean;
   _dashPressed!: boolean;
   _attackPressed!: boolean;
@@ -66,36 +55,25 @@ export default class Player {
   _invulnerable!: boolean;
   body!: any;
 
-  /**
-   * @param {Phaser.Scene} scene
-   * @param {number} x  spawn X
-   * @param {number} y  spawn Y
-   * @param {object} bridge  React↔Phaser bridge
-   */
   constructor(scene, x, y, bridge) {
     this.scene = scene;
     this.bridge = bridge;
     this.state = STATE.IDLE;
 
-    // Stats from bridge (refreshed each frame in update)
     this._stats = bridge?.playerStats ?? {};
 
-    // Phaser sprite
     this.sprite = scene.physics.add.sprite(x, y, 'player');
     this.sprite.setCollideWorldBounds(true);
-    this.sprite.setGravityY(0); // world gravity already applied
+    this.sprite.setGravityY(0);
     this.sprite.setDepth(10);
 
-    // Physics body sizing
     const body = this.sprite.body;
     body.setSize(18, 34);
     body.setOffset(3, 2);
     body.setMaxVelocityX(CFG.SPEED * 1.8);
 
-    // Animations
     this._buildAnims();
 
-    // Timers / flags
     this._jumpsLeft = 1;
     this._coyoteTimer = 0;
     this._jumpBuffer = 0;
@@ -106,7 +84,6 @@ export default class Player {
     this._lastOnGround = false;
     this._lastDir = 1;   // 1 = right, -1 = left
 
-    // Keyboard cursors
     this.keys = scene.input.keyboard.addKeys({
       left: Phaser.Input.Keyboard.KeyCodes.LEFT,
       right: Phaser.Input.Keyboard.KeyCodes.RIGHT,
@@ -120,7 +97,6 @@ export default class Player {
       shift: Phaser.Input.Keyboard.KeyCodes.SHIFT,
     });
 
-    // Track just-pressed (set in update for cleaner input handling)
     this._jumpPressed = false;
     this._attackPressed = false;
     this._grafPressed = false;
@@ -131,18 +107,15 @@ export default class Player {
     scene.input.keyboard.on('keydown-F', () => { this._grafPressed = true; });
     scene.input.keyboard.on('keydown-G', () => { this._grafPressed = true; });
 
-    // Hurt flash emitter ref
     this._hurtTween = null;
 
-    // Wall detection sensors
     this.touchingWallLeft = false;
     this.touchingWallRight = false;
 
-    // Expose sprite directly for colliders setup in MainScene
+    // Exposed so MainScene can wire up physics colliders without reaching into sprite internals.
     this.body = this.sprite.body;
   }
 
-  // Public Getters
   get x() { return this.sprite.x; }
   get y() { return this.sprite.y; }
   get alive() { return this.state !== STATE.HURT || this._hurtTimer > 0; }
@@ -151,7 +124,6 @@ export default class Player {
   get isInvulnerable() { return this._invulnerable; }
   get flipX() { return this.sprite.flipX; }
 
-  // Animation Setup
   _buildAnims() {
     const { anims } = this.scene;
     if (!anims.exists('player_idle')) {
@@ -175,7 +147,6 @@ export default class Player {
     }
   }
 
-
   _startDash(dir) {
     if (this.state === STATE.DASH || this._dashCooldown > 0) return;
     this.state = STATE.DASH;
@@ -185,7 +156,6 @@ export default class Player {
     this.sprite.body.setAllowGravity(false);
     this._lastDir = dir;
 
-    // Dash afterimage effect
     this._spawnDashTrail();
   }
 
@@ -207,30 +177,26 @@ export default class Player {
     }
   }
 
-  // Hurt
   takeDamage(knockbackDir = 1) {
     if (this.state === STATE.HURT || this._invulnerable) return false;
 
     this.state = STATE.HURT;
     this._hurtTimer = CFG.HURT_DURATION;
 
-    // I-Frames (1.5 seconds of invulnerability)
     this._invulnerable = true;
     this.scene.time.delayedCall(1500, () => {
       this._invulnerable = false;
     });
 
-    // Knockback
     this.sprite.body.setVelocity(knockbackDir * 180, -200);
 
-    // Blink effect for I-Frames
     this._hurtTween?.stop();
     this._hurtTween = this.scene.tweens.add({
       targets: this.sprite,
       alpha: 0.2,
       duration: 100,
       yoyo: true,
-      repeat: 7, // 1500ms total approx
+      repeat: 7,
       onComplete: () => this.sprite.setAlpha(1),
     });
     this.sprite.setTint(0xff4444);
@@ -240,29 +206,21 @@ export default class Player {
 
   _recoverFromHurt() {
     this.sprite.clearTint();
-    // (Alpha will be cleared when I-Frame tween finishes)
+    // Alpha is restored by the I-Frame blink tween's onComplete.
     this.state = STATE.IDLE;
   }
 
-  // Main Update
-  /**
-   * @param {number} delta  ms since last frame
-   * @param {object} wallTiles  — { left: bool, right: bool } from MainScene collision checks
-   */
   update(delta, wallTiles) {
-    // Refresh stats from bridge
     this._stats = this.bridge?.playerStats ?? this._stats;
 
     this.touchingWallLeft = wallTiles?.left ?? false;
     this.touchingWallRight = wallTiles?.right ?? false;
 
-    // Tick cooldowns
     if (this._dashCooldown > 0) this._dashCooldown -= delta;
     if (this._jumpBuffer > 0) this._jumpBuffer -= delta;
 
     const onGround = this.sprite.body.blocked.down;
 
-    // Coyote time
     if (onGround) {
       this._coyoteTimer = CFG.COYOTE_TIME;
       this._jumpsLeft = this._stats?.jumpBoost ? 2 : 1;
@@ -270,7 +228,6 @@ export default class Player {
       this._coyoteTimer -= delta;
     }
 
-    // State: HURT
     if (this.state === STATE.HURT) {
       this._hurtTimer -= delta;
       if (this._hurtTimer <= 0) this._recoverFromHurt();
@@ -280,7 +237,6 @@ export default class Player {
       return;
     }
 
-    // State: DASH
     if (this.state === STATE.DASH) {
       this._dashTimer -= delta;
       if (this._dashTimer <= 0) {
@@ -294,13 +250,11 @@ export default class Player {
       this._updateAnim();
       return;
     }
-    // Horizontal movement
+
     const heldLeft = this.keys.left.isDown || this.keys.a.isDown;
     const heldRight = this.keys.right.isDown || this.keys.d.isDown;
 
-    // Trigger Dash via SHIFT
     if (Phaser.Input.Keyboard.JustDown(this.keys.shift) && this._stats?.airDash && this._dashCooldown <= 0) {
-      // Dash in the direction held, or default to facing direction
       if (heldLeft) {
         this._startDash(-1);
       } else if (heldRight) {
@@ -308,9 +262,8 @@ export default class Player {
       } else {
         this._startDash(this._lastDir);
       }
-      return; // Skip normal movement this frame since we just started a dash
+      return;
     }
-
 
     if (heldLeft) {
       this.sprite.body.setVelocityX(-CFG.SPEED);
@@ -321,11 +274,9 @@ export default class Player {
       this.sprite.setFlipX(false);
       this._lastDir = 1;
     } else {
-      // Friction deceleration
       this.sprite.body.setVelocityX(this.sprite.body.velocity.x * 0.75);
     }
 
-    // Wall slide detection
     const onWallLeft = this.touchingWallLeft && heldLeft && !onGround;
     const onWallRight = this.touchingWallRight && heldRight && !onGround;
     const onWall = onWallLeft || onWallRight;
@@ -335,13 +286,11 @@ export default class Player {
       this.state = STATE.WALL_SLIDE;
     }
 
-    // Jump logic (with buffer + coyote time)
     const canJump = (this._coyoteTimer > 0 || onGround) && this._jumpsLeft > 0;
     const wantJump = this._jumpPressed || this._jumpBuffer > 0;
 
     if (wantJump) {
       if (onWall) {
-        // Wall jump!
         const wallDir = onWallRight ? -1 : 1;
         const jumpVel = this._stats?.jumpBoost ? CFG.JUMP_VEL_BOOST : CFG.JUMP_VEL;
         this.sprite.body.setVelocity(wallDir * CFG.WALL_JUMP_VX, CFG.WALL_JUMP_VY);
@@ -359,7 +308,6 @@ export default class Player {
         if (this._jumpsLeft === 0) this._spawnDoubleJumpFX();
         else this._spawnJumpFX();
       } else if (this._stats?.jumpBoost && this._jumpsLeft > 0 && !onGround) {
-        // Mid-air double jump
         this.sprite.body.setVelocityY(CFG.DOUBLE_JUMP_VEL);
         this._jumpsLeft--;
         this._jumpBuffer = 0;
@@ -368,13 +316,12 @@ export default class Player {
       }
     }
 
-    // Determine state for animation
     if (onGround) {
       const moving = Math.abs(this.sprite.body.velocity.x) > 20;
       this.state = moving ? STATE.RUN : STATE.IDLE;
     } else if (!onWall) {
       if (this.state !== STATE.JUMP && this.state !== STATE.DOUBLE_JUMP) {
-        this.state = STATE.JUMP; // falling
+        this.state = STATE.JUMP;
       }
     }
 
@@ -384,7 +331,6 @@ export default class Player {
     this._lastOnGround = onGround;
   }
 
-  // Animation Switcher
   _updateAnim() {
     const moving = Math.abs(this.sprite.body.velocity.x) > 20;
     const animToPlay = moving ? 'player_run' : 'player_idle';
@@ -394,7 +340,6 @@ export default class Player {
     }
   }
 
-  // Jump VFX
   _spawnJumpFX() {
     const emitter = this.scene.add.particles(this.sprite.x, this.sprite.y + 16, 'particle_star', {
       speed: { min: 40, max: 100 },
@@ -421,7 +366,6 @@ export default class Player {
     this.scene.time.delayedCall(1000, () => emitter.destroy());
   }
 
-  // Expose attack/graffiti requests (consumed by MainScene)
   consumeAttack() { const v = this._attackPressed; this._attackPressed = false; return v; }
   consumeGraffiti() { const v = this._grafPressed; this._grafPressed = false; return v; }
 

@@ -3,7 +3,6 @@
 import { useStore, GAME_STATE } from '@/context/StoreContext';
 import { useEffect, useRef, useState } from 'react';
 
-// Animated City Skyline
 function CitySkyline() {
   const canvasRef = useRef(null);
 
@@ -28,7 +27,6 @@ function CitySkyline() {
     const draw = () => {
       ctx.clearRect(0, 0, W, H);
 
-      // Deep purple sky gradient
       const sky = ctx.createLinearGradient(0, 0, 0, H);
       sky.addColorStop(0, '#060010');
       sky.addColorStop(0.7, '#110020');
@@ -36,7 +34,6 @@ function CitySkyline() {
       ctx.fillStyle = sky;
       ctx.fillRect(0, 0, W, H);
 
-      // Moon
       ctx.beginPath();
       ctx.arc(W * 0.82, 18, 14, 0, Math.PI * 2);
       ctx.fillStyle = '#ffffcc';
@@ -45,7 +42,6 @@ function CitySkyline() {
       ctx.fill();
       ctx.shadowBlur = 0;
 
-      // Stars
       for (let s = 0; s < 30; s++) {
         const sx = ((s * 97 + frame * 0.2) % W);
         const sy = (s * 37) % (H * 0.5);
@@ -54,23 +50,19 @@ function CitySkyline() {
         ctx.fillRect(sx, sy, 1.5, 1.5);
       }
 
-      // Buildings
       buildings.forEach((b, idx) => {
-        // Building body
         const bGrad = ctx.createLinearGradient(b.x, H - b.h, b.x + b.w, H);
         bGrad.addColorStop(0, `hsl(${b.hue},25%,10%)`);
         bGrad.addColorStop(1, `hsl(${b.hue},20%,6%)`);
         ctx.fillStyle = bGrad;
         ctx.fillRect(b.x, H - b.h, b.w, b.h);
 
-        // Roof neon line
         ctx.fillStyle = b.signColor;
         ctx.shadowBlur = 4;
         ctx.shadowColor = b.signColor;
         ctx.fillRect(b.x, H - b.h, b.w, 1);
         ctx.shadowBlur = 0;
 
-        // Windows
         b.windows.forEach((lit, wi) => {
           const wx = b.x + 3 + (wi % 3) * Math.floor((b.w - 6) / 3);
           const wy = H - b.h + 5 + Math.floor(wi / 3) * 14;
@@ -88,7 +80,6 @@ function CitySkyline() {
         });
       });
 
-      // Neon ground glow
       const gGrad = ctx.createLinearGradient(0, H - 8, 0, H);
       gGrad.addColorStop(0, 'rgba(255,100,0,0.5)');
       gGrad.addColorStop(1, 'rgba(255,100,0,0)');
@@ -113,7 +104,6 @@ function CitySkyline() {
   );
 }
 
-// Stat Badge
 const StatBadge = ({ label, value, icon }) => (
   <div className="flex flex-col items-center px-5 py-3 rounded-2xl border border-orange-500/25 bg-orange-500/8 backdrop-blur-sm min-w-[90px]">
     <span className="text-lg mb-0.5">{icon}</span>
@@ -122,7 +112,6 @@ const StatBadge = ({ label, value, icon }) => (
   </div>
 );
 
-// Main Menu
 export default function MainMenu() {
   const { setGameState, resetRun, streetCred, highScore, inventory } = useStore();
   const [showResetConfirm, setShowResetConfirm] = useState(false);
@@ -130,7 +119,6 @@ export default function MainMenu() {
   return (
     <div className="relative min-h-screen bg-[#060010] flex flex-col items-center justify-center overflow-hidden select-none">
 
-      {/* Floating background tags */}
       <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
         {['RUN', '🎨', 'CRED', '🔥', 'GRIND', '💀', 'SKATE', '⚡'].map((tag, i) => (
           <span
@@ -149,20 +137,16 @@ export default function MainMenu() {
         ))}
       </div>
 
-      {/* Scan-line overlay */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{ background: 'repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,0.06) 3px,rgba(0,0,0,0.06) 4px)' }}
         aria-hidden="true"
       />
 
-      {/* City skyline at bottom */}
       <CitySkyline />
 
-      {/* Main content */}
       <div className="relative z-10 flex flex-col items-center gap-7 px-6 text-center">
 
-        {/* Title */}
         <div className="relative">
           <div className="text-5xl md:text-7xl font-black tracking-tighter leading-tight text-white drop-shadow-[0_0_40px_rgba(255,100,0,0.6)]">
             URBAN STREET
@@ -170,23 +154,19 @@ export default function MainMenu() {
           <div className="text-4xl md:text-6xl font-black tracking-[0.35em] text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-yellow-400 to-orange-500 drop-shadow-[0_0_20px_rgba(255,150,0,0.5)]">
             SCRAPPER
           </div>
-          {/* Neon underline */}
           <div className="mt-2 h-px w-full bg-gradient-to-r from-transparent via-orange-500 to-transparent opacity-60" />
         </div>
 
-        {/* Tagline */}
         <p className="text-orange-400/60 text-xs tracking-[0.5em] uppercase font-semibold">
           Run · Tag · Fight · Survive
         </p>
 
-        {/* Stats row */}
         <div className="flex gap-3 flex-wrap justify-center">
           <StatBadge label="Street Cred" value={`$${streetCred}`} icon="💰" />
           <StatBadge label="High Score" value={highScore} icon="🏆" />
           <StatBadge label="Gear Owned" value={`${inventory.length}/4`} icon="🎒" />
         </div>
 
-        {/* CTA Buttons */}
         <div className="flex flex-col items-center gap-3 w-full max-w-[280px]">
           <button
             id="btn-play"
@@ -213,7 +193,6 @@ export default function MainMenu() {
           </button>
         </div>
 
-        {/* Controls */}
         <div className="grid grid-cols-2 gap-x-8 gap-y-1 text-gray-600 text-[10px] tracking-wide mt-1">
           <span>A D / ← → &nbsp;Move</span>
           <span>W / ↑ &nbsp;Jump</span>
@@ -230,7 +209,6 @@ export default function MainMenu() {
         </div>
       </div>
 
-      {/* Custom Reset Confirmation Modal */}
       {showResetConfirm && (
         <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm animate-fade-in p-4">
           <div className="bg-[#110520] border border-red-900/50 p-6 rounded-2xl max-w-sm text-center shadow-[0_0_40px_rgba(255,0,0,0.2)]">

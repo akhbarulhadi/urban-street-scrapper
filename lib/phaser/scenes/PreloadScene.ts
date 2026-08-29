@@ -1,33 +1,10 @@
 import Phaser from 'phaser';
-/**
- * PreloadScene — generates ALL game textures procedurally using Phaser Graphics API.
- * No external image files needed. Game will never error due to missing assets.
- *
- * Textures generated:
- *  - player          : neon hoodie character (24×36)
- *  - player_run_1/2  : running animation frames
- *  - player_jump     : jump pose
- *  - enemy           : purple thug sprite (20×30)
- *  - enemy_stun      : stunned enemy (with stars)
- *  - platform        : concrete slab tile (32×16)
- *  - platform_edge_l : left edge decoration
- *  - platform_edge_r : right edge decoration
- *  - ground          : wide ground tile (32×24)
- *  - graffiti_tag    : spray projectile (14×14)
- *  - graffiti_splash : impact splash (24×24)
- *  - punch_fx        : melee hit effect (20×20)
- *  - cred_pickup     : street cred coin (12×12)
- *  - bg_building_*   : background building tiles (3 variants)
- *  - particle_star   : small particle (4×4)
- */
+
 export default class PreloadScene extends Phaser.Scene {
   constructor() {
     super({ key: 'PreloadScene' });
   }
 
-  // Helpers
-
-  // Render graphics to a named texture, then destroy the graphics object.
   _makeTexture(key, w, h, drawFn) {
     const g = this.make.graphics({ x: 0, y: 0 });
     drawFn(g);
@@ -35,7 +12,6 @@ export default class PreloadScene extends Phaser.Scene {
     g.destroy();
   }
 
-  // Draw a rounded rectangle with optional glow stroke.
   _roundRect(g, x, y, w, h, r, fill, stroke, strokeW = 1) {
     g.fillStyle(fill, 1);
     g.fillRoundedRect(x, y, w, h, r);
@@ -45,46 +21,35 @@ export default class PreloadScene extends Phaser.Scene {
     }
   }
 
-  // Asset Generators
-
   _genPlayer() {
-    // Base idle frame (24×36)
     this._makeTexture('player', 24, 36, (g) => {
-      // Hoodie body
       g.fillStyle(0xff6600, 1);
-      g.fillRect(4, 10, 16, 18);           // torso
+      g.fillRect(4, 10, 16, 18);
       g.fillStyle(0xff8800, 1);
-      g.fillRoundedRect(6, 0, 12, 12, 6); // head
-      // Hood shadow
+      g.fillRoundedRect(6, 0, 12, 12, 6);
       g.fillStyle(0xcc4400, 1);
-      g.fillRect(4, 10, 16, 4);           // collar shadow
-      // Eyes — neon white
+      g.fillRect(4, 10, 16, 4);
       g.fillStyle(0xffffff, 1);
       g.fillRect(8, 3, 3, 3);
       g.fillRect(13, 3, 3, 3);
       g.fillStyle(0x00ffff, 1);
       g.fillRect(9, 4, 2, 2);
       g.fillRect(14, 4, 2, 2);
-      // Pants
       g.fillStyle(0x1a1a2e, 1);
-      g.fillRect(4, 28, 7, 8);            // left leg
-      g.fillRect(13, 28, 7, 8);           // right leg
-      // Sneakers
+      g.fillRect(4, 28, 7, 8);
+      g.fillRect(13, 28, 7, 8);
       g.fillStyle(0xffffff, 1);
       g.fillRect(3, 34, 9, 2);
       g.fillRect(12, 34, 9, 2);
-      // Arms
       g.fillStyle(0xff6600, 1);
-      g.fillRect(0, 12, 4, 12);           // left arm
-      g.fillRect(20, 12, 4, 12);          // right arm
-      // Graffiti can on back
+      g.fillRect(0, 12, 4, 12);
+      g.fillRect(20, 12, 4, 12);
       g.fillStyle(0xaa00ff, 1);
       g.fillRect(20, 14, 4, 8);
       g.fillStyle(0xff00ff, 1);
       g.fillRect(21, 12, 2, 3);
     });
 
-    // Run frame 1 — left arm forward, right arm back
     this._makeTexture('player_run_1', 24, 36, (g) => {
       g.fillStyle(0xff6600, 1);
       g.fillRect(4, 10, 16, 18);
@@ -102,13 +67,11 @@ export default class PreloadScene extends Phaser.Scene {
       g.fillStyle(0xffffff, 1);
       g.fillRect(3, 34, 9, 2);
       g.fillRect(12, 34, 9, 2);
-      // Arms swing
       g.fillStyle(0xff6600, 1);
-      g.fillRect(-2, 10, 4, 12);          // left arm forward
-      g.fillRect(20, 14, 4, 12);          // right arm back
+      g.fillRect(-2, 10, 4, 12);
+      g.fillRect(20, 14, 4, 12);
     });
 
-    // Run frame 2 — opposite swing
     this._makeTexture('player_run_2', 24, 36, (g) => {
       g.fillStyle(0xff6600, 1);
       g.fillRect(4, 10, 16, 18);
@@ -127,11 +90,10 @@ export default class PreloadScene extends Phaser.Scene {
       g.fillRect(3, 34, 9, 2);
       g.fillRect(12, 34, 9, 2);
       g.fillStyle(0xff6600, 1);
-      g.fillRect(0, 14, 4, 12);           // left arm back
-      g.fillRect(22, 10, 4, 12);          // right arm forward
+      g.fillRect(0, 14, 4, 12);
+      g.fillRect(22, 10, 4, 12);
     });
 
-    // Jump frame — legs tucked up
     this._makeTexture('player_jump', 24, 32, (g) => {
       g.fillStyle(0xff6600, 1);
       g.fillRect(4, 10, 16, 15);
@@ -143,14 +105,12 @@ export default class PreloadScene extends Phaser.Scene {
       g.fillStyle(0x00ffff, 1);
       g.fillRect(9, 4, 2, 2);
       g.fillRect(14, 4, 2, 2);
-      // Legs tucked
       g.fillStyle(0x1a1a2e, 1);
       g.fillRect(4, 25, 7, 5);
       g.fillRect(13, 25, 7, 5);
       g.fillStyle(0xffffff, 1);
       g.fillRect(3, 28, 9, 2);
       g.fillRect(12, 28, 9, 2);
-      // Arms up
       g.fillStyle(0xff6600, 1);
       g.fillRect(-2, 8, 4, 12);
       g.fillRect(22, 8, 4, 12);
@@ -158,60 +118,47 @@ export default class PreloadScene extends Phaser.Scene {
   }
 
   _genEnemy() {
-    // Idle
     this._makeTexture('enemy', 20, 30, (g) => {
-      // Body — dark purple thug
       g.fillStyle(0x6600cc, 1);
-      g.fillRect(3, 8, 14, 14);           // torso
+      g.fillRect(3, 8, 14, 14);
       g.fillStyle(0x8800ff, 1);
-      g.fillRoundedRect(4, 0, 12, 10, 5);// head
-      // Mean eyes
+      g.fillRoundedRect(4, 0, 12, 10, 5);
       g.fillStyle(0xff0000, 1);
       g.fillRect(6, 2, 3, 2);
       g.fillRect(11, 2, 3, 2);
-      // Mouth (scowl)
       g.fillStyle(0x330066, 1);
       g.fillRect(7, 6, 6, 1);
-      // Pants
       g.fillStyle(0x1a0033, 1);
       g.fillRect(3, 22, 6, 8);
       g.fillRect(11, 22, 6, 8);
-      // Boots
       g.fillStyle(0x220044, 1);
       g.fillRect(2, 28, 8, 2);
       g.fillRect(10, 28, 8, 2);
-      // Arms
       g.fillStyle(0x6600cc, 1);
       g.fillRect(0, 10, 3, 10);
       g.fillRect(17, 10, 3, 10);
     });
 
-    // Stunned — with stars orbiting
     this._makeTexture('enemy_stun', 24, 36, (g) => {
-      // Same body, but tilted look
       g.fillStyle(0x6600cc, 0.7);
       g.fillRect(5, 10, 14, 14);
       g.fillStyle(0x8800ff, 0.7);
       g.fillRoundedRect(6, 2, 12, 10, 5);
-      // X eyes for stunned
       g.fillStyle(0xffff00, 1);
       g.fillRect(8, 4, 2, 2);
       g.fillRect(14, 4, 2, 2);
       g.fillRect(9, 5, 2, 2);
       g.fillRect(13, 5, 2, 2);
-      // Stars
       const starPositions = [[4, 0], [16, 0], [0, 6], [20, 6]];
       g.fillStyle(0xffff00, 1);
       starPositions.forEach(([sx, sy]) => {
         g.fillRect(sx, sy, 3, 3);
       });
-      // Pants
       g.fillStyle(0x1a0033, 1);
       g.fillRect(5, 24, 6, 8);
       g.fillRect(13, 24, 6, 8);
     });
 
-    // Walk frame
     this._makeTexture('enemy_walk', 20, 30, (g) => {
       g.fillStyle(0x6600cc, 1);
       g.fillRect(3, 8, 14, 14);
@@ -233,39 +180,31 @@ export default class PreloadScene extends Phaser.Scene {
   }
 
   _genPlatforms() {
-    // Standard platform tile (32×16) — concrete slab with neon edge
     this._makeTexture('platform', 32, 16, (g) => {
       g.fillStyle(0x2a2a3e, 1);
       g.fillRect(0, 0, 32, 16);
-      // Surface highlight
       g.fillStyle(0x3a3a5e, 1);
       g.fillRect(0, 0, 32, 3);
-      // Neon orange top edge
       g.fillStyle(0xff6600, 1);
       g.fillRect(0, 0, 32, 1);
-      // Crack detail
       g.fillStyle(0x1a1a2e, 1);
       g.fillRect(8, 4, 1, 6);
       g.fillRect(20, 6, 1, 4);
     });
 
-    // Ground tile (32×24) — thicker with graffiti marks
     this._makeTexture('ground', 32, 24, (g) => {
       g.fillStyle(0x1e1e2e, 1);
       g.fillRect(0, 0, 32, 24);
       g.fillStyle(0x2e2e4e, 1);
       g.fillRect(0, 0, 32, 4);
-      // Neon stripe top
       g.fillStyle(0xff6600, 0.8);
       g.fillRect(0, 0, 32, 2);
-      // Spray tag marks
       g.fillStyle(0xff00ff, 0.3);
       g.fillRect(4, 6, 8, 4);
       g.fillStyle(0x00ffff, 0.3);
       g.fillRect(18, 8, 6, 3);
     });
 
-    // Wall tile (16×32) — for wall-jump surfaces
     this._makeTexture('wall', 16, 32, (g) => {
       g.fillStyle(0x1e1e2e, 1);
       g.fillRect(0, 0, 16, 32);
@@ -273,7 +212,6 @@ export default class PreloadScene extends Phaser.Scene {
       g.fillRect(0, 0, 3, 32);
       g.fillStyle(0xff6600, 0.6);
       g.fillRect(0, 0, 1, 32);
-      // Brick lines
       g.fillStyle(0x0e0e1e, 1);
       for (let y = 8; y < 32; y += 8) {
         g.fillRect(0, y, 16, 1);
@@ -282,25 +220,18 @@ export default class PreloadScene extends Phaser.Scene {
   }
 
   _genProjectiles() {
-    // Graffiti tag projectile — glowing spray bubble (14×14)
     this._makeTexture('graffiti_tag', 14, 14, (g) => {
-      // Glow outer
       g.fillStyle(0xaa00ff, 0.3);
       g.fillCircle(7, 7, 7);
-      // Core
       g.fillStyle(0xdd44ff, 0.9);
       g.fillCircle(7, 7, 4);
-      // Bright center
       g.fillStyle(0xffffff, 1);
       g.fillCircle(7, 7, 2);
-      // Nozzle tip (direction indicator)
       g.fillStyle(0xaa00ff, 1);
       g.fillRect(11, 6, 3, 2);
     });
 
-    // Graffiti splash on impact (24×24)
     this._makeTexture('graffiti_splash', 24, 24, (g) => {
-      // Splatter blobs
       const blobs = [
         [12, 12, 8, 0xdd44ff],
         [6, 6, 4, 0xaa00ff],
@@ -314,15 +245,11 @@ export default class PreloadScene extends Phaser.Scene {
       });
     });
 
-    // Melee punch hit effect (20×20) — star drawn as polygon
     this._makeTexture('punch_fx', 20, 20, (g) => {
-      // Outer glow circle
       g.fillStyle(0xffaa00, 0.7);
       g.fillCircle(10, 10, 9);
-      // Inner bright core
       g.fillStyle(0xffffff, 0.9);
       g.fillCircle(10, 10, 4);
-      // 4-point cross overlay
       g.fillStyle(0xffdd00, 1);
       g.fillRect(3, 8, 14, 4);
       g.fillRect(8, 3, 4, 14);
@@ -330,14 +257,12 @@ export default class PreloadScene extends Phaser.Scene {
   }
 
   _genPickups() {
-    // Street Cred coin (12×12)
     this._makeTexture('cred_pickup', 12, 12, (g) => {
       g.fillStyle(0xffcc00, 1);
       g.fillCircle(6, 6, 6);
       g.fillStyle(0xff8800, 1);
       g.fillCircle(6, 6, 4);
       g.fillStyle(0xffee88, 1);
-      // "$" symbol — two rects for the S
       g.fillRect(4, 2, 4, 1);
       g.fillRect(4, 5, 4, 1);
       g.fillRect(4, 8, 4, 1);
@@ -348,11 +273,9 @@ export default class PreloadScene extends Phaser.Scene {
   }
 
   _genBackground() {
-    // Background building variant A (64×120)
     this._makeTexture('bg_building_a', 64, 120, (g) => {
       g.fillStyle(0x0d0d1a, 1);
       g.fillRect(0, 0, 64, 120);
-      // Windows grid
       for (let row = 0; row < 8; row++) {
         for (let col = 0; col < 3; col++) {
           const lit = Math.random() > 0.4;
@@ -360,14 +283,12 @@ export default class PreloadScene extends Phaser.Scene {
           g.fillRect(8 + col * 18, 10 + row * 14, 10, 8);
         }
       }
-      // Rooftop antenna
       g.fillStyle(0xff6600, 0.7);
       g.fillRect(30, 0, 4, 10);
       g.fillStyle(0xff0000, 1);
       g.fillRect(29, 0, 6, 2);
     });
 
-    // Background building variant B (48×90)
     this._makeTexture('bg_building_b', 48, 90, (g) => {
       g.fillStyle(0x0a0a18, 1);
       g.fillRect(0, 0, 48, 90);
@@ -380,7 +301,6 @@ export default class PreloadScene extends Phaser.Scene {
       }
     });
 
-    // Background building variant C (80×150)
     this._makeTexture('bg_building_c', 80, 150, (g) => {
       g.fillStyle(0x0c0c1e, 1);
       g.fillRect(0, 0, 80, 150);
@@ -392,28 +312,25 @@ export default class PreloadScene extends Phaser.Scene {
           g.fillRect(6 + col * 18, 8 + row * 14, 10, 8);
         }
       }
-      // Graffiti art on building side
       g.fillStyle(0xff00ff, 0.25);
       g.fillRect(10, 80, 30, 20);
       g.fillStyle(0x00ffff, 0.2);
       g.fillRect(40, 90, 25, 15);
     });
 
-    // Small particle (4×4) for effects
     this._makeTexture('particle_star', 4, 4, (g) => {
       g.fillStyle(0xffffff, 1);
       g.fillRect(1, 0, 2, 4);
       g.fillRect(0, 1, 4, 2);
     });
 
-    // Neon sign decoration (48×20)
     this._makeTexture('neon_sign', 48, 20, (g) => {
       g.fillStyle(0x0a0010, 1);
       g.fillRect(0, 0, 48, 20);
       g.lineStyle(2, 0xff6600, 1);
       g.strokeRect(2, 2, 44, 16);
       g.fillStyle(0xff6600, 1);
-      g.fillRect(4, 4, 6, 12);  // letter shapes
+      g.fillRect(4, 4, 6, 12);
       g.fillRect(12, 4, 10, 2);
       g.fillRect(12, 10, 10, 2);
       g.fillRect(12, 16, 10, 2);
@@ -425,7 +342,6 @@ export default class PreloadScene extends Phaser.Scene {
   }
 
   _genLoadingBar() {
-    // A simple loading progress bar bg (200×20)
     this._makeTexture('load_bar_bg', 200, 20, (g) => {
       g.fillStyle(0x111122, 1);
       g.fillRoundedRect(0, 0, 200, 20, 10);
@@ -434,12 +350,9 @@ export default class PreloadScene extends Phaser.Scene {
     });
   }
 
-  // ─── Scene Lifecycle ─────────────────────────────────────────────────────────
-
   create() {
     const { width, height } = this.scale;
 
-    // Show a loading screen while generating textures
     const bg = this.add.rectangle(width / 2, height / 2, width, height, 0x0a0010);
     const title = this.add.text(width / 2, height / 2 - 60, 'URBAN STREET SCRAPPER', {
       fontFamily: 'monospace',
@@ -455,12 +368,10 @@ export default class PreloadScene extends Phaser.Scene {
       color: '#ffffff',
     }).setOrigin(0.5).setAlpha(0.7);
 
-    // Bar background
     const barBg = this.add.rectangle(width / 2, height / 2 + 40, 202, 22, 0x111122).setOrigin(0.5);
     this.add.rectangle(width / 2, height / 2 + 40, 200, 20, 0x111122).setOrigin(0.5);
     const bar = this.add.rectangle(width / 2 - 99, height / 2 + 40, 0, 16, 0xff6600).setOrigin(0, 0.5);
 
-    // Generate all assets in order, updating the bar
     const steps = [
       { fn: () => this._genPlayer(), label: 'Drawing player...' },
       { fn: () => this._genEnemy(), label: 'Spawning enemies...' },
@@ -483,14 +394,13 @@ export default class PreloadScene extends Phaser.Scene {
       bar.width = ((stepIndex + 1) / steps.length) * 198;
       step.fn();
       stepIndex++;
-      // Use a small delay so the UI updates between heavy operations
+      // Small delay lets the browser repaint the progress bar between heavy generation steps.
       this.time.delayedCall(50, runNextStep);
     };
 
-    // Kick off generation after one frame (ensures the loading UI is rendered first)
+    // One-frame delay ensures the loading UI renders before generation starts.
     this.time.delayedCall(100, runNextStep);
 
-    // Pulse animation on title
     this.tweens.add({
       targets: title,
       alpha: 0.6,
